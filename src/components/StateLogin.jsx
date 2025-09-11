@@ -4,16 +4,11 @@ export default function StateLogin() {
   // const [enteredEmail, setEnteredEmail] = useState("");
   // const [enteredPassword, setEnteredPassword] = useState("");
   const [enteredValues, setEnteredValues] = useState({
-    email: '', 
-    pass: ''
-  })
+    email: "",
+    pass: "",
+  });
 
-  function handleInputChanged(input, event) {
-    setEnteredValues(prevValues => ({
-      ...prevValues,
-      [input] : event.target.value
-    }))
-  }
+  const emailIsInvalid = enteredValues.email !== '' && !enteredValues.email.includes("@");
 
   // function handleEmailChange(event) {
   //   setEnteredEmail(event.target.value);
@@ -28,6 +23,13 @@ export default function StateLogin() {
     console.log(enteredValues);
   }
 
+  function handleInputChanged(input, event) {
+    setEnteredValues((prevValues) => ({
+      ...prevValues,
+      [input]: event.target.value,
+    }));
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <h2>Login</h2>
@@ -39,9 +41,12 @@ export default function StateLogin() {
             id="email"
             type="email"
             name="email"
-            onChange={(event) => handleInputChanged('email', event)}
+            onChange={(event) => handleInputChanged("email", event)}
             value={enteredValues.email}
           />
+          <div className="control-error">
+            {emailIsInvalid && <p>Email is Invalid</p>}
+          </div>
         </div>
 
         <div className="control no-margin">
@@ -50,7 +55,7 @@ export default function StateLogin() {
             id="password"
             type="password"
             name="password"
-            onChange={(event) => handleInputChanged('pass', event)}
+            onChange={(event) => handleInputChanged("pass", event)}
             value={enteredValues.pass}
           />
         </div>
