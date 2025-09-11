@@ -4,11 +4,17 @@ export default function StateLogin() {
   // const [enteredEmail, setEnteredEmail] = useState("");
   // const [enteredPassword, setEnteredPassword] = useState("");
   const [enteredValues, setEnteredValues] = useState({
-    email: "",
-    pass: "",
+    email: {
+      value: '',
+      didEdit: false,
+    },
+    pass: {
+      value: '',
+      didEdit: false,
+    },
   });
 
-  const emailIsInvalid = enteredValues.email !== '' && !enteredValues.email.includes("@");
+  const emailIsInvalid = didEdit.email && !enteredValues.email.value.includes("@");
 
   // function handleEmailChange(event) {
   //   setEnteredEmail(event.target.value);
@@ -30,6 +36,18 @@ export default function StateLogin() {
     }));
   }
 
+  function handleInputBlur(identifier){
+    setEnteredValues((values) => {
+      return {
+        ...values,
+        [identifier]: {
+          ...[identifier],
+          didEdit: true
+        }
+      }
+    })
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <h2>Login</h2>
@@ -42,7 +60,8 @@ export default function StateLogin() {
             type="email"
             name="email"
             onChange={(event) => handleInputChanged("email", event)}
-            value={enteredValues.email}
+            onBlur={(event) => handleInputBlur("email", event)}
+            value={enteredValues.email.value}
           />
           <div className="control-error">
             {emailIsInvalid && <p>Email is Invalid</p>}
@@ -56,7 +75,8 @@ export default function StateLogin() {
             type="password"
             name="password"
             onChange={(event) => handleInputChanged("pass", event)}
-            value={enteredValues.pass}
+            onBlur={(event) => handleInputBlur('pass', event)}
+            value={enteredValues.pass.value}
           />
         </div>
       </div>
