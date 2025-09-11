@@ -32,14 +32,17 @@ export default function StateLogin() {
   function handleInputChanged(input, event) {
     setEnteredValues((prevValues) => ({
       ...prevValues,
-      [input]: event.target.value,
+      [input]: {
+        value:  event.target.value,
+        didEdit: false
+      }
     }));
   }
 
   function handleInputBlur(identifier){
-    setEnteredValues((values) => {
+    setEnteredValues((prevValues) => {
       return {
-        ...values,
+        ...prevValues,
         [identifier]: {
           ...[identifier],
           didEdit: true
