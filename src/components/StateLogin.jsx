@@ -15,8 +15,8 @@ export default function StateLogin() {
     },
   });
 
-  const emailIsInvalid =
-    didEdit.email && !enteredValues.email.value.includes("@");
+  const emailIsInvalid = enteredValues.email.didEdit && !enteredValues.email.value.includes("@");
+  const passwordIsInvalid = enteredValues.pass.didEdit && enteredValues.pass.value.length < 6;
 
   // function handleEmailChange(event) {
   //   setEnteredEmail(event.target.value);
@@ -77,6 +77,7 @@ export default function StateLogin() {
           onBlur={(event) => handleInputBlur("email", event)}
           onChange={(event) => handleInputChanged("email", event)}
           value={enteredValues.email.value}
+          error={emailIsInvalid && 'Please enter a valid email'}
         />
 
         <Input
@@ -87,6 +88,7 @@ export default function StateLogin() {
           onBlur={(event) => handleInputBlur("pass", event)}
           onChange={(event) => handleInputChanged("pass", event)}
           value={enteredValues.pass.value}
+          error={passwordIsInvalid && 'Please enter a valid password'}
         />
       </div>
 
