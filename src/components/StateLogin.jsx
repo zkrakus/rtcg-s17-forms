@@ -26,6 +26,9 @@ export default function StateLogin() {
 
   function handleSubmit(event) {
     event.preventDefault(); // Not needed for button type="button"
+
+    // Be sure to add input validation here as well.
+
     console.log(enteredValues);
   }
 
