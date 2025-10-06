@@ -1,71 +1,41 @@
-import { useState } from "react";
 import Input from "./Input";
 import { hasMinLength, isEmail, isNotEmpty } from "../util/validation";
+import { useInput } from "../hooks/useInput";
 
 export default function StateLogin() {
-  // const [enteredEmail, setEnteredEmail] = useState("");
-  // const [enteredPassword, setEnteredPassword] = useState("");
-  const [enteredValues, setEnteredValues] = useState({
-    email: {
-      value: "",
-      didEdit: false,
-    },
-    pass: {
-      value: "",
-      didEdit: false,
-    },
+  const {
+    value: emailValue,
+    handleInputChanged: handleEmailChanged,
+    handleInputBlur: handleEmailBlur,
+    emailHasError,
+  } = useInput("", (value) => {
+    return !isEmail(value) && !isNotEmpty(value);
   });
 
-  const emailIsInvalid =
-    enteredValues.email.didEdit &&
-    !isEmail(enteredValues.email) &&
-    !isNotEmpty(enteredValues.email);
-  const passwordIsInvalid =
-    enteredValues.pass.didEdit && !hasMinLength(enteredValues.password, 6);
+  const {
+    value: passwordValue,
+    handleInputChanged: handlePasswordChanged,
+    handleInputBlur: handlePasswordBlur,
+    passwordHasError,
+  } = useInput("", (value) => {
+    return !hasMinLength(value, 6);
+  });
 
-  // function handleEmailChange(event) {
-  //   setEnteredEmail(event.target.value);
-  // }
-
-  // function handlePasswordChange(event) {
-  //   setEnteredPassword(event.target.value);
-  // }
-
-  function handleSubmit(event) {
-    event.preventDefault(); // Not needed for button type="button"
-
-    // Be sure to add input validation here as well.
-
-    console.log(enteredValues);
-  }
-
-  function handleInputChanged(input, event) {
-    setEnteredValues((prevValues) => ({
-      ...prevValues,
-      [input]: {
-        value: event.target.value,
-        didEdit: false,
-      },
-    }));
-  }
-
-  function handleInputBlur(identifier) {
-    setEnteredValues((prevValues) => {
-      return {
-        ...prevValues,
-        [identifier]: {
-          ...[identifier],
-          didEdit: true,
-        },
-      };
-    });
+  function handleSubmit() {
+    if (!emailHasError || passwordHasError) {
+      emailHasError && console.log("email:", emailValue);
+      passwordHasError && console.log("password:", passwordValue);
+    } else {
+      console.log("email:", emailValue);
+      console.log("password:", passwordValue);
+    }
   }
 
   <div className="control no-margin">
     <label htmlFor="email">Email</label>
     <input id="email" type="email" name="email" />
     <div className="control-error">
-      {emailIsInvalid && <p>Email is Invalid</p>}
+      {emailHasError && <p>Email is Invalid</p>}
     </div>
   </div>;
 
@@ -79,10 +49,10 @@ export default function StateLogin() {
           id="email"
           type="email"
           name="email"
-          onBlur={(event) => handleInputBlur("email", event)}
-          onChange={(event) => handleInputChanged("email", event)}
+          onBlur={handleEmailBlur}
+          onChange={handleEmailChanged}
           value={enteredValues.email.value}
-          error={emailIsInvalid && "Please enter a valid email"}
+          error={emailHasError && "Please enter a valid email"}
         />
 
         <Input
@@ -90,10 +60,10 @@ export default function StateLogin() {
           id="password"
           type="password"
           name="password"
-          onBlur={(event) => handleInputBlur("pass", event)}
-          onChange={(event) => handleInputChanged("pass", event)}
+          onBlur={handlePasswordBlur}
+          onChange={handlePasswordChanged}
           value={enteredValues.pass.value}
-          error={passwordIsInvalid && "Please enter a valid password"}
+          error={passwordHasError && "Please enter a valid password"}
         />
       </div>
 
